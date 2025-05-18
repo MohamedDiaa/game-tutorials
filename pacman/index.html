@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pacman</title>
+
+    <style>
+      body {
+        background-color: antiquewhite;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+
+      class Boundary {
+        constructor({ position }) {
+          this.position = position;
+          this.width = 40;
+          this.height = 40;
+        }
+
+        draw() {
+          ctx.fillStyle = "blue";
+          ctx.fillRect(
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height
+          );
+        }
+      }
+
+      const map = [
+        ["_", "_", "_", "_", "_", "_"],
+        ["_", " ", " ", " ", " ", "_"],
+        ["_", " ", " ", " ", " ", "_"],
+        ["_", "_", "_", "_", "_", "_"],
+      ];
+
+      const boundaries = [];
+
+      map.forEach((row, i) => {
+        row.forEach((Symbol, j) => {
+          switch (Symbol) {
+            case "_":
+              boundaries.push(
+                new Boundary({
+                  position: {
+                    x: 40 * j,
+                    y: 40 * i,
+                  },
+                })
+              );
+              break;
+          }
+        });
+      });
+
+      boundaries.forEach((boundary) => boundary.draw());
+    </script>
+  </body>
+</html>
