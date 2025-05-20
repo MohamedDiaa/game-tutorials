@@ -69,14 +69,6 @@
         }
       }
 
-      const map = [
-        ["_", "_", "_", "_", "_", "_"],
-        ["_", " ", " ", " ", " ", "_"],
-        ["_", " ", "_", "_", " ", "_"],
-        ["_", " ", " ", " ", " ", "_"],
-        ["_", "_", "_", "_", "_", "_"],
-      ];
-
       const boundaries = [];
       const player = new Player({
         position: {
@@ -88,6 +80,30 @@
           y: 0,
         },
       });
+
+      const keys = {
+        w: {
+          pressed: false,
+        },
+
+        a: {
+          pressed: false,
+        },
+        s: {
+          pressed: false,
+        },
+        d: {
+          pressed: false,
+        },
+      };
+
+      const map = [
+        ["_", "_", "_", "_", "_", "_"],
+        ["_", " ", " ", " ", " ", "_"],
+        ["_", " ", "_", "_", " ", "_"],
+        ["_", " ", " ", " ", " ", "_"],
+        ["_", "_", "_", "_", "_", "_"],
+      ];
 
       map.forEach((row, i) => {
         row.forEach((Symbol, j) => {
@@ -111,28 +127,60 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         boundaries.forEach((boundary) => boundary.draw());
         player.update();
+
+        player.velocity.y = 0;
+        player.velocity.x = 0;
+
+        if(keys.w.pressed) {
+            player.velocity.y = -5;
+        } else if(keys.s.pressed) {
+            player.velocity.y = 5;
+        }
+        else if(keys.a.pressed) {
+            player.velocity.x = -5;
+        }
+        else if(keys.d.pressed) {
+            player.velocity.x = 5;
+        }
       }
 
-            animate();
-
+      animate();
 
       window.addEventListener("keydown", ({ key }) => {
         switch (key) {
           case "w":
-            player.velocity.y = -5;
+            keys.w.pressed = true;
             break;
           case "a":
-            player.velocity.x = -5;
+            keys.a.pressed = true;
+            break;
+          case "s":
+            keys.s.pressed = true;
+            break;
+          case "d":
+            keys.d.pressed = true;
+            break;
+        }
+        // console.log(keys);
+      });
+
+      window.addEventListener("keyup", ({ key }) => {
+        switch (key) {
+          case "w":
+            keys.w.pressed = false;
+            break;
+          case "a":
+            keys.a.pressed = false;
             break;
 
           case "s":
-            player.velocity.y = 5;
+            keys.s.pressed = false;
             break;
           case "d":
-            player.velocity.x = 5;
+            keys.d.pressed = false;
             break;
         }
-        console.log(player.velocity);
+        // console.log(keys);
       });
     </script>
   </body>
