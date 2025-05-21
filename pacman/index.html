@@ -8,15 +8,29 @@
     <style>
       body {
         background-color: black;
+        margin: 0;
+        padding: 10px 20px;
       }
     </style>
   </head>
   <body>
+    <p
+      style="
+        color: white;
+        font-family: sans-serif;
+        font-size: 14px;
+        margin-bottom: 6px;
+      "
+    >
+      <span>Score: </span> <span id="scoreEl">0</span>
+    </p>
     <canvas id="canvas"></canvas>
 
     <script>
       const canvas = document.getElementById("canvas");
       const ctx = canvas.getContext("2d");
+      const scoreEl = document.getElementById("scoreEl");
+
       canvas.width = innerWidth;
       canvas.height = innerHeight;
 
@@ -84,17 +98,23 @@
       });
 
       class Pellet {
-        constructor({position}) {
-            this.position = position;
-            this.radius = 3;
+        constructor({ position }) {
+          this.position = position;
+          this.radius = 3;
         }
 
         draw() {
-            ctx.beginPath();
-            ctx.arc(this.position.x, this.position.y,this.radius,0,Math.PI * 2);
-            ctx.fillStyle = "white";
-            ctx.fill();
-            ctx.closePath();
+          ctx.beginPath();
+          ctx.arc(
+            this.position.x,
+            this.position.y,
+            this.radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = "white";
+          ctx.fill();
+          ctx.closePath();
         }
       }
 
@@ -116,6 +136,7 @@
       };
 
       let lastKey = "";
+      let score = 0;
 
       function createImage(src) {
         const image = new Image();
@@ -434,16 +455,21 @@
           }
         }
 
-        for(let i = pellets.length - 1; i > 0; i--)
-         {
-            const pellet = pellets[i];
-            pellet.draw();
-            if(Math.hypot(pellet.position.x - player.position.x,
-                pellet.position.y - player.position.y
-            ) < pellet.radius + player.radius){
-                pellets.splice(i, 1);
-            }
-        };
+        for (let i = pellets.length - 1; i > 0; i--) {
+          const pellet = pellets[i];
+          pellet.draw();
+          if (
+            Math.hypot(
+              pellet.position.x - player.position.x,
+              pellet.position.y - player.position.y
+            ) <
+            pellet.radius + player.radius
+          ) {
+            pellets.splice(i, 1);
+            score += 10;
+            scoreEl.innerHTML = score;
+          }
+        }
         boundaries.forEach((boundary) => {
           boundary.draw();
 
