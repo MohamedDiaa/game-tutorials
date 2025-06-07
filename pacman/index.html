@@ -85,6 +85,34 @@
         }
       }
 
+      class Ghost {
+        constructor({ position, velocity }) {
+          this.position = position;
+          this.velocity = velocity;
+          this.radius = 15;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(
+            this.position.x,
+            this.position.y,
+            this.radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fillStyle = "red";
+          ctx.fill();
+          ctx.closePath();
+        }
+
+        update() {
+          this.draw();
+          this.position.x += this.velocity.x;
+          this.position.y += this.velocity.y;
+        }
+      }
+
       const boundaries = [];
       const player = new Player({
         position: {
@@ -137,6 +165,14 @@
 
       let lastKey = "";
       let score = 0;
+      let ghosts = [
+        new Ghost({
+          position: {
+            x: Boundary.width * 6 + Boundary.width / 2,
+            y: Boundary.height + Boundary.height / 2,
+          },
+        }),
+      ];
 
       function createImage(src) {
         const image = new Image();
@@ -486,8 +522,25 @@
         });
         player.update();
 
-        // player.velocity.y = 0;
-        // player.velocity.x = 0;
+        ghosts.forEach((ghost) => {
+          ghost.update();
+
+          boundaries.forEach((boundary) => {
+            if (
+              circleCollidesWithRectangle({
+                circle: {
+                  ...player,
+                  velocity: {
+                    x: 0,
+                    y: 5,
+                  },
+                },
+                rectangle: boundary,
+              })
+            ) {
+            }
+          });
+        });
       }
 
       animate();
